@@ -7,6 +7,13 @@
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
     <form method="GET" action="{{ route('siswa.index') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Cari Siswa</label>
+            <div class="relative">
+                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama, NIS, NISN..." class="pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-full">
+            </div>
+        </div>
+        <div>
             <label class="block text-xs font-medium text-gray-600 mb-1">Kelas</label>
             <select name="kelas_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                 <option value="">Semua Kelas</option>
@@ -58,18 +65,18 @@
                         @endif
                     </td>
                     <td class="px-4 sm:px-6 py-4">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('siswa.show', $siswa) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Detail"><i class="ph ph-eye"></i></a>
-                            <a href="{{ route('siswa.edit', $siswa) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('siswa.destroy', $siswa) }}" onsubmit="return confirm('Hapus {{ $siswa->nama_siswa }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('siswa.show', $siswa) }}" class="p-2 bg-white/70 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Lihat Detail Siswa"><i class="ph ph-eye"></i></a>
+                            <a href="{{ route('siswa.edit', $siswa) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Data Siswa"><i class="ph ph-pencil"></i></a>
+                            <form method="POST" action="{{ route('siswa.destroy', $siswa) }}" data-confirm="Hapus {{ $siswa->nama_siswa }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Data Siswa"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-400">Belum ada data siswa.</td></tr>
+                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-400">{{ request('search') ? 'Siswa tidak ditemukan.' : 'Belum ada data siswa.' }}</td></tr>
                 @endforelse
             </tbody>
         </table>

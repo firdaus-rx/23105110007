@@ -218,12 +218,29 @@ document.getElementById('formPromote')?.addEventListener('submit', function(e) {
     const checked = document.querySelectorAll('.siswa-checkbox:checked');
     if (checked.length === 0) {
         e.preventDefault();
-        alert('Pilih minimal satu siswa untuk dinaikkan.');
+        Swal.fire({
+            title: 'Peringatan',
+            text: 'Pilih minimal satu siswa untuk dinaikkan.',
+            icon: 'warning',
+            confirmButtonColor: '#2563eb',
+        });
         return;
     }
-    if (!confirm(`Naikkan ${checked.length} siswa ke kelas berikutnya?`)) {
-        e.preventDefault();
-    }
+    e.preventDefault();
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: `Naikkan ${checked.length} siswa ke kelas berikutnya?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, naikkan!',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.submit();
+        }
+    });
 });
 </script>
 @endpush

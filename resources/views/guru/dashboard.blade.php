@@ -4,49 +4,86 @@
 @section('page-title', 'Dashboard Guru')
 
 @section('content')
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+    <div class="flex flex-wrap items-center gap-4">
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+            <i class="ph ph-calendar text-blue-600"></i>
+            <span class="font-medium">Tahun Pelajaran:</span>
+            <span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold">{{ $tahunAktif?->nama_tahun ?? '-' }}</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+            <i class="ph ph-calendar-blank text-green-600"></i>
+            <span class="font-medium">Semester:</span>
+            <span class="px-2.5 py-1 bg-green-50 text-green-700 rounded-lg text-xs font-semibold">{{ $semesterAktif?->nama_semester ?? '-' }}</span>
+        </div>
+    </div>
+</div>
+
 {{-- Stat Cards --}}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500">Kelas Diajar</p>
-                <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">{{ $totalKelas }}</p>
+                <p class="text-xs text-gray-500 font-medium">Kelas Diajar</p>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $totalKelas }}</p>
             </div>
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <i class="ph ph-buildings text-xl sm:text-2xl text-blue-600"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-buildings text-lg text-white"></i>
             </div>
         </div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500">Total Siswa</p>
-                <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">{{ $totalSiswa }}</p>
+                <p class="text-xs text-gray-500 font-medium">Total Siswa</p>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $totalSiswa }}</p>
             </div>
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <i class="ph ph-users text-xl sm:text-2xl text-green-600"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-users text-lg text-white"></i>
             </div>
         </div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500">Mata Pelajaran</p>
-                <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">{{ $totalMapel }}</p>
+                <p class="text-xs text-gray-500 font-medium">Laki-laki</p>
+                <p class="text-2xl font-bold text-sky-600 mt-1">{{ $siswaLaki }}</p>
             </div>
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <i class="ph ph-book text-xl sm:text-2xl text-purple-600"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-sky-500 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-gender-male text-lg text-white"></i>
             </div>
         </div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500">Total Jadwal</p>
-                <p class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">{{ $totalJadwal }}</p>
+                <p class="text-xs text-gray-500 font-medium">Perempuan</p>
+                <p class="text-2xl font-bold text-pink-600 mt-1">{{ $siswaPerempuan }}</p>
             </div>
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <i class="ph ph-clock text-xl sm:text-2xl text-orange-600"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-400 to-pink-500 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-gender-female text-lg text-white"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs text-gray-500 font-medium">Mata Pelajaran</p>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $totalMapel }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-book text-lg text-white"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs text-gray-500 font-medium">Total Jadwal</p>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $totalJadwal }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-clock text-lg text-white"></i>
             </div>
         </div>
     </div>

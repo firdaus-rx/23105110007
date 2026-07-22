@@ -5,54 +5,72 @@
 
 @section('content')
 {{-- Stat Cards --}}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 hover:shadow-md transition">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500 font-medium">Total Siswa</p>
-                <p class="text-2xl sm:text-3xl font-bold text-blue-600 mt-1">{{ $totalSiswa }}</p>
+                <p class="text-xs text-gray-500 font-medium">Total Siswa</p>
+                <p class="text-2xl font-bold text-blue-600 mt-1">{{ $totalSiswa }}</p>
             </div>
-            <div class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
-                <i class="ph ph-student text-xl sm:text-2xl text-white"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-student text-lg text-white"></i>
             </div>
         </div>
-        <div class="mt-3 text-xs text-gray-400">Terdaftar di sistem</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 hover:shadow-md transition">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500 font-medium">Total Guru</p>
-                <p class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">{{ $totalGuru }}</p>
+                <p class="text-xs text-gray-500 font-medium">Laki-laki</p>
+                <p class="text-2xl font-bold text-sky-600 mt-1">{{ $siswaLaki }}</p>
             </div>
-            <div class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm">
-                <i class="ph ph-chalkboard-teacher text-xl sm:text-2xl text-white"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-sky-500 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-gender-male text-lg text-white"></i>
             </div>
         </div>
-        <div class="mt-3 text-xs text-gray-400">Tenaga pengajar</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 hover:shadow-md transition">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500 font-medium">Total Kelas</p>
-                <p class="text-2xl sm:text-3xl font-bold text-purple-600 mt-1">{{ $totalKelas }}</p>
+                <p class="text-xs text-gray-500 font-medium">Perempuan</p>
+                <p class="text-2xl font-bold text-pink-600 mt-1">{{ $siswaPerempuan }}</p>
             </div>
-            <div class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-sm">
-                <i class="ph ph-buildings text-xl sm:text-2xl text-white"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-400 to-pink-500 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-gender-female text-lg text-white"></i>
             </div>
         </div>
-        <div class="mt-3 text-xs text-gray-400">Rombel aktif</div>
     </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 hover:shadow-md transition">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-xs sm:text-sm text-gray-500 font-medium">Mata Pelajaran</p>
-                <p class="text-2xl sm:text-3xl font-bold text-orange-600 mt-1">{{ $totalMapel }}</p>
+                <p class="text-xs text-gray-500 font-medium">Total Guru</p>
+                <p class="text-2xl font-bold text-emerald-600 mt-1">{{ $totalGuru }}</p>
             </div>
-            <div class="w-11 h-11 sm:w-13 sm:h-13 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-sm">
-                <i class="ph ph-book text-xl sm:text-2xl text-white"></i>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-chalkboard-teacher text-lg text-white"></i>
             </div>
         </div>
-        <div class="mt-3 text-xs text-gray-400">Aktif</div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs text-gray-500 font-medium">Total Kelas</p>
+                <p class="text-2xl font-bold text-purple-600 mt-1">{{ $totalKelas }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-buildings text-lg text-white"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs text-gray-500 font-medium">Mata Pelajaran</p>
+                <p class="text-2xl font-bold text-orange-600 mt-1">{{ $totalMapel }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-sm shrink-0">
+                <i class="ph ph-book text-lg text-white"></i>
+            </div>
+        </div>
     </div>
 </div>
 

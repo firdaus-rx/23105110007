@@ -99,11 +99,11 @@
                             @endif">{{ $nilai->predikat ?? '-' }}</span>
                     </td>
                     <td class="px-4 sm:px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('nilai-rapor.edit', $nilai) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('nilai-rapor.destroy', $nilai) }}" onsubmit="return confirm('Hapus nilai {{ $nilai->siswa->nama_siswa }} - {{ $nilai->mataPelajaran->nama_mapel }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('nilai-rapor.edit', $nilai) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Nilai"><i class="ph ph-pencil"></i></a>
+                            <form method="POST" action="{{ route('nilai-rapor.destroy', $nilai) }}" data-confirm="Hapus nilai {{ $nilai->siswa->nama_siswa }} - {{ $nilai->mataPelajaran->nama_mapel }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Nilai"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>

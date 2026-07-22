@@ -48,6 +48,12 @@
 </div>
 
 @forelse($rapors as $kelas => $items)
+@php
+    $first = $items->first();
+    $kelasId = $first->kelas_id;
+    $tahunId = $first->tahun_pelajaran_id;
+    $semesterId = $first->semester_id;
+@endphp
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
     <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-indigo-50 to-indigo-100 border-b border-gray-200">
         <div class="flex items-center justify-between">
@@ -60,6 +66,15 @@
                     <p class="text-xs text-indigo-600">{{ count($items) }} rapor</p>
                 </div>
             </div>
+            <form method="POST" action="{{ route('rapor.sinkron-ranking') }}" class="inline" data-confirm="Sinkronkan ranking untuk Kelas {{ $kelas }}?">
+                @csrf
+                <input type="hidden" name="kelas_id" value="{{ $kelasId }}">
+                <input type="hidden" name="tahun_pelajaran_id" value="{{ $tahunId }}">
+                <input type="hidden" name="semester_id" value="{{ $semesterId }}">
+                <button type="submit" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1.5">
+                    <i class="ph ph-arrows-clockwise"></i> Sinkron Ranking
+                </button>
+            </form>
         </div>
     </div>
     <div class="overflow-x-auto">
@@ -87,12 +102,18 @@
                         </span>
                     </td>
                     <td class="px-4 sm:px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('rapor.show', $r) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Detail"><i class="ph ph-eye"></i></a>
-                            <a href="{{ route('rapor.edit', $r) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('rapor.destroy', $r) }}" onsubmit="return confirm('Hapus rapor {{ $r->siswa->nama_siswa }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('rapor.show', $r) }}" class="p-2 bg-white/70 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Lihat Detail Rapor"><i class="ph ph-eye"></i></a>
+                            <a href="{{ route('rapor.edit', $r) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Rapor"><i class="ph ph-pencil"></i></a>
+                            @if($r->status_rapor == 'draft')
+                            <form method="POST" action="{{ route('rapor.finalisasi', $r) }}" data-confirm="Finalisasi rapor {{ $r->siswa->nama_siswa }}? Tindakan ini tidak dapat dibatalkan.">
+                                @csrf
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition" title="Finalisasi Rapor"><i class="ph ph-check-circle"></i></button>
+                            </form>
+                            @endif
+                            <form method="POST" action="{{ route('rapor.destroy', $r) }}" data-confirm="Hapus rapor {{ $r->siswa->nama_siswa }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Rapor"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>

@@ -31,11 +31,11 @@
                         @endif
                     </td>
                     <td class="px-4 sm:px-6 py-4">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('semester.edit', $s) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('semester.destroy', $s) }}" onsubmit="return confirm('Hapus {{ $s->nama_semester }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('semester.edit', $s) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Semester"><i class="ph ph-pencil"></i></a>
+                            <form method="POST" action="{{ route('semester.destroy', $s) }}" data-confirm="Hapus {{ $s->nama_semester }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Semester"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>

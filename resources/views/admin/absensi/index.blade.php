@@ -82,11 +82,11 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-center">{{ $a->izin }}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-center">{{ $a->alfa }}</td>
                     <td class="px-4 sm:px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('absensi.edit', $a) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('absensi.destroy', $a) }}" onsubmit="return confirm('Hapus absensi {{ $a->siswa->nama_siswa }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('absensi.edit', $a) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Absensi"><i class="ph ph-pencil"></i></a>
+                            <form method="POST" action="{{ route('absensi.destroy', $a) }}" data-confirm="Hapus absensi {{ $a->siswa->nama_siswa }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Absensi"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>

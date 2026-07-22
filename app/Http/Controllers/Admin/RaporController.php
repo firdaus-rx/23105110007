@@ -187,6 +187,50 @@ class RaporController extends Controller
         return redirect()->route('rapor.index')->with('success', 'Rapor berhasil diperbarui.');
     }
 
+    public function finalisasi(Rapor $rapor)
+    {
+        $this->nilaiService->hitungPeringkat(
+            $rapor->kelas_id,
+            $rapor->tahun_pelajaran_id,
+            $rapor->semester_id
+        );
+
+        $rapor->update([
+            'status_rapor' => 'final',
+            'tanggal_rapor' => now(),
+        ]);
+
+        return redirect()->route('rapor.index')->with('success', 'Rapor berhasil difinalisasi.');
+    }
+
+    public function sinkronRanking(Request $request)
+    {
+        $kelasId = $request->kelas_id;
+        $tahunPelajaranId = $request->tahun_pelajaran_id;
+        $semesterId = $request->semester_id;
+
+        if (!$kelasId || !$tahunPelajaranId || !$semesterId) {
+            return back()->with('error', 'Pilih kelas, tahun pelajaran, dan semester terlebih dahulu.');
+        }
+
+        $siswas = Siswa::where('kelas_id', $kelasId)->get();
+
+        foreach ($siswas as $siswa) {
+            $this->nilaiService->updateRaporSiswa(
+                $siswa->id, $kelasId, $tahunPelajaranId, $semesterId
+            );
+        }
+
+        $this->nilaiService->hitungPeringkat($kelasId, $tahunPelajaranId, $semesterId);
+
+        $kelas = Kelas::find($kelasId);
+        return redirect()->route('rapor.index', [
+            'kelas_id' => $kelasId,
+            'tahun_pelajaran_id' => $tahunPelajaranId,
+            'semester_id' => $semesterId,
+        ])->with('success', "Ranking Kelas {$kelas?->nama_kelas} berhasil disinkronkan.");
+    }
+
     public function destroy(Rapor $rapor)
     {
         $rapor->delete();

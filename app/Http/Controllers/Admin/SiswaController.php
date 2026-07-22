@@ -22,6 +22,15 @@ class SiswaController extends Controller
             $query->where('kelas_id', $request->kelas_id);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_siswa', 'like', "%{$search}%")
+                  ->orWhere('nis', 'like', "%{$search}%")
+                  ->orWhere('nisn', 'like', "%{$search}%");
+            });
+        }
+
         $siswas = $query->latest()->get();
         $selectedKelas = $request->kelas_id;
 

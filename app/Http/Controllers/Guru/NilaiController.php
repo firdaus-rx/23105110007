@@ -8,6 +8,8 @@ use App\Models\JadwalMengajar;
 use App\Models\MataPelajaran;
 use App\Models\NilaiRapor;
 use App\Models\Siswa;
+use App\Models\TahunPelajaran;
+use App\Models\Semester;
 use App\Services\NilaiService;
 use Illuminate\Http\Request;
 
@@ -91,14 +93,33 @@ class NilaiController extends Controller
             }
         }
 
+        $this->nilaiService->hitungPeringkat(
+            $jadwal->kelas_id,
+            $jadwal->tahun_pelajaran_id,
+            $jadwal->semester_id
+        );
+
         return redirect()->route('guru.nilai.index', $jadwal)->with('success', 'Nilai berhasil disimpan.');
     }
 
-    public function rekap()
+    public function rekap(Request $request)
     {
         $guru = Guru::where('user_id', auth()->id())->firstOrFail();
+        $tahunAktif = TahunPelajaran::where('status_aktif', true)->first();
+        $semesterAktif = Semester::where('status_aktif', true)->first();
+        $allTahun = TahunPelajaran::orderBy('nama_tahun')->get();
+        $allSemester = Semester::all();
+
+        $tahunId = $request->tahun_pelajaran_id;
+        $semesterId = $request->semester_id;
+
         $jadwals = JadwalMengajar::with(['kelas', 'mataPelajaran', 'tahunPelajaran', 'semester'])
-            ->where('guru_id', $guru->id)->get();
+            ->where('guru_id', $guru->id)
+            ->when($tahunId, fn($q) => $q->where('tahun_pelajaran_id', $tahunId))
+            ->when(!$tahunId && $tahunAktif, fn($q) => $q->where('tahun_pelajaran_id', $tahunAktif->id))
+            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
+            ->when(!$semesterId && $semesterAktif, fn($q) => $q->where('semester_id', $semesterAktif->id))
+            ->get();
 
         $rekapGroup = [];
         foreach ($jadwals as $j) {
@@ -113,6 +134,8 @@ class NilaiController extends Controller
             ];
         }
 
-        return view('guru.nilai.rekap', compact('rekapGroup'));
+        return view('guru.nilai.rekap', compact(
+            'rekapGroup', 'tahunAktif', 'semesterAktif', 'allTahun', 'allSemester'
+        ));
     }
 }

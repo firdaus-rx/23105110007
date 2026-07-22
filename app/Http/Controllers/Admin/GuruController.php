@@ -12,9 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class GuruController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $gurus = Guru::with('user')->latest()->get();
+        $gurus = Guru::with('user');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $gurus->where(function ($q) use ($search) {
+                $q->where('nama_guru', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('telepon', 'like', "%{$search}%");
+            });
+        }
+
+        $gurus = $gurus->latest()->get();
         return view('admin.guru.index', compact('gurus'));
     }
 

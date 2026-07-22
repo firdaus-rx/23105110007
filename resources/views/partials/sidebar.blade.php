@@ -25,6 +25,7 @@
             <x-nav-link href="{{ url('/admin/nilai-rapor') }}" icon="ph-file-text" label="Nilai Rapor" />
             <x-nav-link href="{{ url('/admin/absensi') }}" icon="ph-clipboard-text" label="Absensi" />
             <x-nav-link href="{{ url('/admin/rapor') }}" icon="ph-certificate" label="Rapor" />
+            <x-nav-link href="{{ route('admin.kenaikan-kelas') }}" icon="ph-arrow-fat-up" label="Kenaikan Kelas" />
 
         @elseif($role === 'guru')
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Guru</p>
@@ -42,9 +43,16 @@
             <x-nav-link href="{{ route('siswa.nilai') }}" icon="ph-file-text" label="Nilai Saya" />
             <x-nav-link href="{{ route('siswa.rapor') }}" icon="ph-certificate" label="Rapor Saya" />
         @endif
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-4 mb-2">Akun</p>
+        <x-nav-link href="{{ route('profile') }}" icon="ph-user-circle" label="Profil Saya" />
     </nav>
 
-    <div class="p-4 border-t border-gray-200">
+    <div class="p-4 border-t border-gray-200 space-y-1">
+        <a href="{{ route('profile') }}" class="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
+            <i class="ph ph-user-circle text-lg"></i>
+            <span>Profil Saya</span>
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="flex items-center gap-3 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">

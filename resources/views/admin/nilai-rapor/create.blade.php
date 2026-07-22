@@ -22,21 +22,15 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Guru <span class="text-red-500">*</span></label>
-                    <select name="guru_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
-                        <option value="">Pilih...</option>
-                        @foreach($gurus as $g)
-                            <option value="{{ $g->id }}" @selected(old('guru_id')==$g->id)>{{ $g->nama_guru }}</option>
-                        @endforeach
+                    <select name="guru_id" id="guru_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="">Pilih Kelas Terlebih Dahulu</option>
                     </select>
                     @error('guru_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran <span class="text-red-500">*</span></label>
-                    <select name="mata_pelajaran_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
-                        <option value="">Pilih...</option>
-                        @foreach($mataPelajarans as $m)
-                            <option value="{{ $m->id }}" @selected(old('mata_pelajaran_id')==$m->id)>{{ $m->nama_mapel }} (KKM {{ $m->kkm }})</option>
-                        @endforeach
+                    <select name="mata_pelajaran_id" id="mata_pelajaran_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="">Pilih Guru Terlebih Dahulu</option>
                     </select>
                     @error('mata_pelajaran_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -97,14 +91,77 @@
 
 @push('scripts')
 <script>
-document.getElementById('kelas_id').addEventListener('change', function() {
-    const kelasId = this.value;
-    const container = document.getElementById('siswaContainer');
-    const tbody = document.getElementById('siswaTableBody');
-    const loading = document.getElementById('loadingSiswa');
-    const emptyKelas = document.getElementById('emptyKelas');
-    const submitBtn = document.getElementById('submitContainer');
+const kelasSelect = document.getElementById('kelas_id');
+const guruSelect = document.getElementById('guru_id');
+const mapelSelect = document.getElementById('mata_pelajaran_id');
+const container = document.getElementById('siswaContainer');
+const tbody = document.getElementById('siswaTableBody');
+const loading = document.getElementById('loadingSiswa');
+const emptyKelas = document.getElementById('emptyKelas');
+const submitBtn = document.getElementById('submitContainer');
 
+function loadGuru(kelasId) {
+    guruSelect.innerHTML = '<option value="">Memuat...</option>';
+    guruSelect.disabled = true;
+    mapelSelect.innerHTML = '<option value="">Pilih Guru Terlebih Dahulu</option>';
+    mapelSelect.disabled = true;
+
+    if (!kelasId) {
+        guruSelect.innerHTML = '<option value="">Pilih Kelas Terlebih Dahulu</option>';
+        guruSelect.disabled = false;
+        return;
+    }
+
+    fetch('/admin/nilai-rapor/get-guru/' + kelasId)
+        .then(res => res.json())
+        .then(gurus => {
+            guruSelect.innerHTML = '<option value="">Pilih Guru...</option>';
+            gurus.forEach(g => {
+                guruSelect.innerHTML += `<option value="${g.id}">${g.nama_guru}${g.nip ? ' (' + g.nip + ')' : ''}</option>`;
+            });
+            guruSelect.disabled = false;
+
+            @if(old('guru_id'))
+            guruSelect.value = '{{ old('guru_id') }}';
+            guruSelect.dispatchEvent(new Event('change'));
+            @endif
+        })
+        .catch(() => {
+            guruSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+            guruSelect.disabled = false;
+        });
+}
+
+function loadMapel(kelasId, guruId) {
+    mapelSelect.innerHTML = '<option value="">Memuat...</option>';
+    mapelSelect.disabled = true;
+
+    if (!kelasId || !guruId) {
+        mapelSelect.innerHTML = '<option value="">Pilih Guru Terlebih Dahulu</option>';
+        mapelSelect.disabled = false;
+        return;
+    }
+
+    fetch('/admin/nilai-rapor/get-mapel/' + kelasId + '/' + guruId)
+        .then(res => res.json())
+        .then(mapels => {
+            mapelSelect.innerHTML = '<option value="">Pilih Mata Pelajaran...</option>';
+            mapels.forEach(m => {
+                mapelSelect.innerHTML += `<option value="${m.id}">${m.nama_mapel} (KKM ${m.kkm})</option>`;
+            });
+            mapelSelect.disabled = false;
+
+            @if(old('mata_pelajaran_id'))
+            mapelSelect.value = '{{ old('mata_pelajaran_id') }}';
+            @endif
+        })
+        .catch(() => {
+            mapelSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+            mapelSelect.disabled = false;
+        });
+}
+
+function loadSiswa(kelasId) {
     if (!kelasId) {
         container.classList.add('hidden');
         emptyKelas.classList.remove('hidden');
@@ -151,10 +208,19 @@ document.getElementById('kelas_id').addEventListener('change', function() {
             loading.classList.add('hidden');
             tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Gagal memuat data siswa.</td></tr>';
         });
+}
+
+kelasSelect.addEventListener('change', function() {
+    loadGuru(this.value);
+    loadSiswa(this.value);
+});
+
+guruSelect.addEventListener('change', function() {
+    loadMapel(kelasSelect.value, this.value);
 });
 
 @if(old('kelas_id'))
-document.getElementById('kelas_id').dispatchEvent(new Event('change'));
+kelasSelect.dispatchEvent(new Event('change'));
 @endif
 </script>
 @endpush

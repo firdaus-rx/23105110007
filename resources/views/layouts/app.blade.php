@@ -8,6 +8,7 @@
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-slate-100 font-sans antialiased">
 
@@ -35,41 +36,51 @@
                 @php $role = Auth::user()->role; @endphp
 
                 @if($role === 'admin')
-                    <x-nav-link href="{{ route('admin.dashboard') }}" icon="ph-chart-bar" label="Dashboard" />
+                    <x-nav-link href="{{ route('admin.dashboard') }}" icon="ph-chart-bar" label="Dashboard" route="admin.dashboard" />
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-6 mb-2">Master Data</p>
-                    <x-nav-link href="{{ url('/admin/guru') }}" icon="ph-chalkboard-teacher" label="Data Guru" />
-                    <x-nav-link href="{{ url('/admin/kelas') }}" icon="ph-buildings" label="Data Kelas" />
-                    <x-nav-link href="{{ url('/admin/siswa') }}" icon="ph-student" label="Data Siswa" />
-                    <x-nav-link href="{{ url('/admin/mata-pelajaran') }}" icon="ph-book" label="Mata Pelajaran" />
+                    <x-nav-link href="{{ url('/admin/guru') }}" icon="ph-chalkboard-teacher" label="Data Guru" route="guru.*" />
+                    <x-nav-link href="{{ url('/admin/kelas') }}" icon="ph-buildings" label="Data Kelas" route="kelas.*" />
+                    <x-nav-link href="{{ url('/admin/siswa') }}" icon="ph-student" label="Data Siswa" route="siswa.*" />
+                    <x-nav-link href="{{ url('/admin/mata-pelajaran') }}" icon="ph-book" label="Mata Pelajaran" route="mata-pelajaran.*" />
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-4 mb-2">Pengaturan</p>
-                    <x-nav-link href="{{ url('/admin/tahun-pelajaran') }}" icon="ph-calendar" label="Tahun Pelajaran" />
-                    <x-nav-link href="{{ url('/admin/semester') }}" icon="ph-calendar-blank" label="Semester" />
+                    <x-nav-link href="{{ url('/admin/tahun-pelajaran') }}" icon="ph-calendar" label="Tahun Pelajaran" route="tahun-pelajaran.*" />
+                    <x-nav-link href="{{ url('/admin/semester') }}" icon="ph-calendar-blank" label="Semester" route="semester.*" />
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-4 mb-2">Akademik</p>
-                    <x-nav-link href="{{ url('/admin/jadwal-mengajar') }}" icon="ph-clock" label="Jadwal Mengajar" />
-                    <x-nav-link href="{{ url('/admin/nilai-rapor') }}" icon="ph-file-text" label="Nilai Rapor" />
-                    <x-nav-link href="{{ url('/admin/absensi') }}" icon="ph-clipboard-text" label="Absensi" />
-                    <x-nav-link href="{{ url('/admin/rapor') }}" icon="ph-certificate" label="Rapor" />
-                    <x-nav-link href="{{ route('admin.kenaikan-kelas') }}" icon="ph-arrow-fat-up" label="Kenaikan Kelas" />
+                    <x-nav-link href="{{ url('/admin/jadwal-mengajar') }}" icon="ph-clock" label="Jadwal Mengajar" route="jadwal-mengajar.*" />
+                    <x-nav-link href="{{ url('/admin/nilai-rapor') }}" icon="ph-file-text" label="Nilai Rapor" route="nilai-rapor.*" />
+                    <x-nav-link href="{{ url('/admin/absensi') }}" icon="ph-clipboard-text" label="Absensi" route="absensi.*" />
+                    <x-nav-link href="{{ url('/admin/rapor') }}" icon="ph-certificate" label="Rapor" route="rapor.*" />
+                    <x-nav-link href="{{ route('admin.kenaikan-kelas') }}" icon="ph-arrow-fat-up" label="Kenaikan Kelas" route="admin.kenaikan-kelas*" />
 
                 @elseif($role === 'guru')
+                    @php $guru = \App\Models\Guru::where('user_id', auth()->id())->first(); @endphp
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Guru</p>
-                    <x-nav-link href="{{ route('guru.dashboard') }}" icon="ph-chart-bar" label="Dashboard" />
-                    <x-nav-link href="{{ route('guru.jadwal') }}" icon="ph-clock" label="Jadwal Mengajar" />
-                    <x-nav-link href="{{ route('guru.nilai.rekap') }}" icon="ph-file-text" label="Rekap Nilai" />
+                    <x-nav-link href="{{ route('guru.dashboard') }}" icon="ph-chart-bar" label="Dashboard" route="guru.dashboard" />
+                    <x-nav-link href="{{ route('guru.jadwal') }}" icon="ph-clock" label="Jadwal Mengajar" route="guru.jadwal" />
+                    <x-nav-link href="{{ route('guru.nilai.rekap') }}" icon="ph-file-text" label="Rekap Nilai" route="guru.nilai.*" />
+                    @if($guru && \App\Models\Kelas::where('wali_kelas_id', $guru->id)->exists())
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-4 mb-2">Wali Kelas</p>
-                    <x-nav-link href="{{ route('guru.wali.index') }}" icon="ph-users" label="Data Siswa" />
-                    <x-nav-link href="{{ route('guru.wali.absensi') }}" icon="ph-clipboard-text" label="Absensi" />
-                    <x-nav-link href="{{ route('guru.wali.rapor') }}" icon="ph-certificate" label="Rapor" />
+                    <x-nav-link href="{{ route('guru.wali.index') }}" icon="ph-users" label="Data Siswa" route="guru.wali.index" />
+                    <x-nav-link href="{{ route('guru.wali.absensi') }}" icon="ph-clipboard-text" label="Absensi" route="guru.wali.absensi*" />
+                    <x-nav-link href="{{ route('guru.wali.rapor') }}" icon="ph-certificate" label="Rapor" route="guru.wali.rapor*" />
+                    @endif
 
                 @elseif(in_array($role, ['siswa', 'orang_tua']))
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Siswa / Orang Tua</p>
-                    <x-nav-link href="{{ route('siswa.dashboard') }}" icon="ph-chart-bar" label="Dashboard" />
-                    <x-nav-link href="{{ route('siswa.nilai') }}" icon="ph-file-text" label="Nilai Saya" />
-                    <x-nav-link href="{{ route('siswa.rapor') }}" icon="ph-certificate" label="Rapor Saya" />
+                    <x-nav-link href="{{ route('siswa.dashboard') }}" icon="ph-chart-bar" label="Dashboard" route="siswa.dashboard" />
+                    <x-nav-link href="{{ route('siswa.nilai') }}" icon="ph-file-text" label="Nilai Saya" route="siswa.nilai" />
+                    <x-nav-link href="{{ route('siswa.rapor') }}" icon="ph-certificate" label="Rapor Saya" route="siswa.rapor*" />
                 @endif
+
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mt-4 mb-2">Akun</p>
+                <x-nav-link href="{{ route('profile') }}" icon="ph-user-circle" label="Profil Saya" route="profile*" />
             </nav>
 
-            <div class="p-4 border-t border-gray-200">
+            <div class="p-4 border-t border-gray-200 space-y-1">
+                <a href="{{ route('profile') }}" class="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition lg:hidden">
+                    <i class="ph ph-user-circle text-lg"></i>
+                    <span>Profil Saya</span>
+                </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="flex items-center gap-3 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition">
@@ -92,15 +103,15 @@
                 </div>
 
                 <div class="flex items-center gap-3 shrink-0">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <a href="{{ route('profile') }}" class="flex items-center gap-3 group">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition">
                             <i class="ph ph-user text-blue-600 text-sm"></i>
                         </div>
                         <div class="text-sm hidden sm:block">
-                            <p class="font-medium text-gray-700">{{ Auth::user()->name }}</p>
+                            <p class="font-medium text-gray-700 group-hover:text-blue-600 transition">{{ Auth::user()->name }}</p>
                             <p class="text-xs text-gray-400 capitalize">{{ Auth::user()->role }}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </header>
 
@@ -118,6 +129,29 @@
     </div>
 
     <script>
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            const confirmText = form.getAttribute('data-confirm');
+            if (confirmText) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: confirmText,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, lanjutkan!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.removeAttribute('data-confirm');
+                        form.submit();
+                    }
+                });
+            }
+        });
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const backdrop = document.getElementById('sidebar-backdrop');

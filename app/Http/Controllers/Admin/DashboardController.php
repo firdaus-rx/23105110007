@@ -20,6 +20,8 @@ class DashboardController extends Controller
     public function index()
     {
         $totalSiswa = Siswa::count();
+        $siswaLaki = Siswa::where('jenis_kelamin', 'L')->count();
+        $siswaPerempuan = Siswa::where('jenis_kelamin', 'P')->count();
         $totalGuru = Guru::count();
         $totalKelas = Kelas::count();
         $totalMapel = MataPelajaran::where('status', 'aktif')->count();
@@ -62,7 +64,7 @@ class DashboardController extends Controller
             ->get();
 
         return view('admin.dashboard', compact(
-            'totalSiswa', 'totalGuru', 'totalKelas', 'totalMapel',
+            'totalSiswa', 'siswaLaki', 'siswaPerempuan', 'totalGuru', 'totalKelas', 'totalMapel',
             'siswaPerKelas', 'nilaiTertinggi', 'nilaiTerendah', 'rataNilaiPerKelas',
             'chartKelasLabels', 'chartKelasSiswa', 'recentRapors',
             'tahunAktif', 'semesterAktif'

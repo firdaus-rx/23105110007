@@ -88,11 +88,11 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-gray-600">{{ $j->mataPelajaran->nama_mapel }}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-gray-600">{{ $j->tahunPelajaran->nama_tahun }} / {{ $j->semester->nama_semester }}</td>
                     <td class="px-4 sm:px-6 py-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ route('jadwal-mengajar.edit', $j) }}" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Edit"><i class="ph ph-pencil"></i></a>
-                            <form method="POST" action="{{ route('jadwal-mengajar.destroy', $j) }}" onsubmit="return confirm('Hapus jadwal {{ $j->mataPelajaran->nama_mapel }} kelas {{ $j->kelas->nama_kelas }}?')">
+                        <div class="flex items-center justify-center gap-1">
+                            <a href="{{ route('jadwal-mengajar.edit', $j) }}" class="p-2 bg-white/70 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit Jadwal"><i class="ph ph-pencil"></i></a>
+                            <form method="POST" action="{{ route('jadwal-mengajar.destroy', $j) }}" data-confirm="Hapus jadwal {{ $j->mataPelajaran->nama_mapel }} kelas {{ $j->kelas->nama_kelas }}?">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Hapus"><i class="ph ph-trash"></i></button>
+                                <button type="submit" class="p-2 bg-white/70 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Jadwal"><i class="ph ph-trash"></i></button>
                             </form>
                         </div>
                     </td>

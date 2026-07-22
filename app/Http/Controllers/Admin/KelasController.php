@@ -10,9 +10,22 @@ use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kelas = Kelas::with('waliKelas')->latest()->get();
+        $kelas = Kelas::with('waliKelas');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $kelas->where(function ($q) use ($search) {
+                $q->where('nama_kelas', 'like', "%{$search}%")
+                  ->orWhere('tingkat', 'like', "%{$search}%")
+                  ->orWhereHas('waliKelas', function ($q2) use ($search) {
+                      $q2->where('nama_guru', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $kelas = $kelas->latest()->get();
         return view('admin.kelas.index', compact('kelas'));
     }
 

@@ -9,9 +9,19 @@ use Illuminate\Http\Request;
 
 class MataPelajaranController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mataPelajarans = MataPelajaran::latest()->get();
+        $mataPelajarans = MataPelajaran::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $mataPelajarans->where(function ($q) use ($search) {
+                $q->where('nama_mapel', 'like', "%{$search}%")
+                  ->orWhere('kode_mapel', 'like', "%{$search}%");
+            });
+        }
+
+        $mataPelajarans = $mataPelajarans->latest()->get();
         return view('admin.mata-pelajaran.index', compact('mataPelajarans'));
     }
 

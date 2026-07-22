@@ -13,6 +13,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Profile
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
 // Cetak rapor (all roles)
 Route::get('/rapor/{rapor}/cetak', [App\Http\Controllers\RaporController::class, 'cetak'])->name('rapor.cetak')->middleware('auth');
 
@@ -29,12 +35,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('nilai-rapor', App\Http\Controllers\Admin\NilaiRaporController::class);
     Route::get('get-siswa-by-kelas/{kelas}', [App\Http\Controllers\Admin\AbsensiController::class, 'getSiswaByKelas'])->name('get-siswa-by-kelas');
     Route::get('nilai-rapor/get-siswa/{kelas}', [App\Http\Controllers\Admin\NilaiRaporController::class, 'getSiswaByKelas'])->name('nilai-rapor.get-siswa');
+    Route::get('nilai-rapor/get-guru/{kelas}', [App\Http\Controllers\Admin\NilaiRaporController::class, 'getGuruByKelas'])->name('nilai-rapor.get-guru');
+    Route::get('nilai-rapor/get-mapel/{kelas}/{guru}', [App\Http\Controllers\Admin\NilaiRaporController::class, 'getMapelByGuruDanKelas'])->name('nilai-rapor.get-mapel');
     Route::resource('absensi', App\Http\Controllers\Admin\AbsensiController::class);
     Route::get('rapor/get-siswa/{kelas}', [App\Http\Controllers\Admin\RaporController::class, 'getSiswaByKelas'])->name('rapor.get-siswa');
     Route::get('rapor/get-data/{siswa}', [App\Http\Controllers\Admin\RaporController::class, 'getRaporData'])->name('rapor.get-data');
     Route::get('kenaikan-kelas', [App\Http\Controllers\Admin\KenaikanKelasController::class, 'index'])->name('admin.kenaikan-kelas');
     Route::get('kenaikan-kelas/preview', [App\Http\Controllers\Admin\KenaikanKelasController::class, 'preview'])->name('admin.kenaikan-kelas.preview');
     Route::post('kenaikan-kelas/promote', [App\Http\Controllers\Admin\KenaikanKelasController::class, 'promote'])->name('admin.kenaikan-kelas.promote');
+    Route::post('rapor/{rapor}/finalisasi', [App\Http\Controllers\Admin\RaporController::class, 'finalisasi'])->name('rapor.finalisasi');
+    Route::post('rapor/sinkron-ranking', [App\Http\Controllers\Admin\RaporController::class, 'sinkronRanking'])->name('rapor.sinkron-ranking');
     Route::resource('rapor', App\Http\Controllers\Admin\RaporController::class);
 });
 

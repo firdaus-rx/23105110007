@@ -82,6 +82,24 @@ class NilaiRaporController extends Controller
         return response()->json($siswas);
     }
 
+    public function getGuruByKelas(Kelas $kelas)
+    {
+        $gurus = Guru::whereHas('jadwalMengajar', function ($q) use ($kelas) {
+            $q->where('kelas_id', $kelas->id);
+        })->get(['id', 'nama_guru', 'nip']);
+
+        return response()->json($gurus);
+    }
+
+    public function getMapelByGuruDanKelas(Kelas $kelas, Guru $guru)
+    {
+        $mapels = MataPelajaran::whereHas('jadwalMengajar', function ($q) use ($kelas, $guru) {
+            $q->where('kelas_id', $kelas->id)->where('guru_id', $guru->id);
+        })->where('status', 'aktif')->get(['id', 'nama_mapel', 'kkm']);
+
+        return response()->json($mapels);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -132,6 +150,12 @@ class NilaiRaporController extends Controller
                 );
             }
         }
+
+        $this->nilaiService->hitungPeringkat(
+            $request->kelas_id,
+            $request->tahun_pelajaran_id,
+            $request->semester_id
+        );
 
         return redirect()->route('nilai-rapor.index')->with('success', 'Nilai rapor berhasil ditambahkan.');
     }
@@ -202,6 +226,12 @@ class NilaiRaporController extends Controller
                 );
             }
         }
+
+        $this->nilaiService->hitungPeringkat(
+            $request->kelas_id,
+            $request->tahun_pelajaran_id,
+            $request->semester_id
+        );
 
         return redirect()->route('nilai-rapor.index')->with('success', 'Nilai rapor berhasil diperbarui.');
     }
